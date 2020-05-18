@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <login>普通Slot插值</login>
+        <hr>
+        <register>
+            <!-- 推荐使用template  v-slot缩写# slot已被弃用，但仍支持.需要导入3.0以上js文件 -->
+            <template v-slot:fname>
+                <h2 slot="fname">指明name插槽</h2>
+            </template>
+        </register>
+        <hr>
+        <todo-list :list="list">
+            <!-- <template v-slot:default="slotProps">
+                {{slotProps.item.text}}
+            </template> -->
+        </todo-list>
+    </div>
+    <script>
+        
+
+
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               list:[
+                   {
+                       id:1,
+                       text:'orange'
+                   },
+                   {
+                       id:2,
+                       text:'apple'
+                   },
+                   {
+                       id:3,
+                       text:'pineApple'
+                   }
+               ]
+           },
+           methods: {},
+           components:{
+               login:{
+                   data:function(){
+                       return {
+                           title:'登录标题'
+                       }
+                   },
+                   template:`
+                        <div>
+                            <h1>{{title}}</h1>
+                            <strong>
+                                <slot></slot>
+                            </strong>
+                        </div>
+                   `
+               },
+               register:{
+                   data:function(){
+                       return {
+                           title:'注册标题'
+                       }
+                   },
+                   template:`
+                        <div>
+                            <h1>{{title}}</h1>
+                            <strong>
+                                <slot name="fname"></slot>
+                            </strong>
+                        </div>
+                   `
+               },
+               todoList:{
+                    props:['list'],
+                    template:`
+                        <div>
+                            <li :key="item.id" v-for="item in list">
+                                <slot :item="item">
+                                    {{item.text}}
+                                </slot>
+                            </li>
+                        </div>
+                    `
+               }
+           }
+        });
+    </script>
+</body>
+
+</html>

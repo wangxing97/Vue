@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p v-cloak>{{ msg }}</p>
+        <h4 v-text="msg"></h4>  
+        <h4 v-once>这里的信息不会发生改变:{{msg}}</h4>
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+        <!--
+            默认v-text 没有闪烁问题
+            v-text会覆盖原本内容，插值表达式只更换自己的占位符，其余不改变
+        -->
+        <div v-html="msg2"></div>
+        <!-- v-bind 是Vue中提供用于绑定属性的指令  也可以只留一个:也代表v-bind: -->
+        <!--v-on的快捷方式是 @-->
+        <input type="button" value="按钮" v-bind:title="mytitle + '123' " v-on:click="show">
+        <a :href="url"></a>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                msg:'123',
+                msg2:'<h1>哈哈哈哈，我是h1标签</h1>',
+                mytitle:'自己定义的title',
+                isButtonDisabled:true,
+                url:'www.baidu.com'
+            },
+            methods: {
+                show:function(){
+                    alert('Hello');
+                    
+                }
+            },
+        })
+    </script>
+</body>
+</html>

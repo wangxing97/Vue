@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <script src="./lib/vue-resource.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css">
+</head>
+
+<body>
+    <div id="app">
+        
+        
+        <div class="panel panel-primary">
+              <div class="panel-heading">
+                    <h3 class="panel-title">品牌添加</h3>
+              </div>
+              <div class="panel-body form-inline">
+                    <label for="">
+                        Name:
+                        <input type="text" v-model="name">
+                    </label>
+                    <input type="button" value="添加"　@click="add" class="btn btn-primary">
+              </div>
+        </div>
+        
+
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Opertion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list" :key="item.id">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.ctime}}</td>
+                    <td>
+                        <a href="">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                name:'',
+                list:[
+                    { id:1,name:'宝马',ctime:new Date()},
+                    { id:2,name:'奔驰',ctime:new Date()}
+                ]
+            },
+            created() {
+                this.getAllList();
+            },
+            methods: {
+                add(){
+                    
+                },
+                getAllList(){
+                    //接口不管乎，想测试自己写个接口
+                    //1、已经导入了Vue.resource这个包可以直接通过this.$http发起请求
+                    this.$http.get('http://127.0.0.1:9999/message').then(result=>{
+                        if(result.status === 200){
+                            this.list = result.body;
+                        }else{
+                            console.log("no ok"+result.status);
+                        }
+                    })
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

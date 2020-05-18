@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <style>
+        .inner {
+            height: 150px;
+            background-color: chocolate;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- .self只会阻止自己点击冒泡 -->
+    <div id="app" class="inner" @click.self="di1Handler">
+        <!-- 使用.stop 阻止点击冒泡 -->
+        <input type="button" value="点我" @click="btnHandler">
+        <!-- .once 只会触发一次函数 会将别的函数也只设为一次 -->
+        <a href="http://www.baidu.com" @click.prevent.stop.once="linkprevent">有问题，去百度</a>
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {},
+            methods: {
+                di1Handler() {
+                    console.log('inner div');
+                },
+                btnHandler() {
+                    console.log('btn click');
+                },
+                linkprevent() {
+                    console.log('prevent click');
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

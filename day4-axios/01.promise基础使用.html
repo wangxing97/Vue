@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <script src="./lib/jquery.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        // $.ajax({
+        //     url:"http://localhost:3000/data",
+        //     type:"GET",
+        //     success:function(data){
+        //         console.log(data);
+        //         var item = JSON.parse(data);
+        //         console.log(item.info);
+        //     }
+        // });
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+        var p = new Promise(function(resolve,reject){
+            setTimeout(function(){
+                var flag = false;
+                if(flag){
+                    resolve('success');
+                }else{
+                    reject('error');
+                }
+            },1000)
+        })
+        p.then(function(data){
+            console.log("One:"+data);
+        },function(data){
+            console.log("Two:"+data);
+        })
+    </script>
+</body>
+
+</html>

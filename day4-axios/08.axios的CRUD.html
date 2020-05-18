@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <script src="./lib/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        // Get将参数携带在URL上
+        axios.get('http://localhost:3000/axios?id=1')
+        .then(function(data){
+            console.log(data.data);
+        })
+        // Get将参数使用RestFul风格
+        axios.get('http://localhost:3000/axios/2')
+        .then(function(data){
+            console.log(data.data);
+        })
+        //Get将参数放在params对象里
+        axios.get('http://localhost:3000/axios',{
+            params:{
+                id:3
+            }
+        })
+        .then( data => {
+            console.log(data.data);
+        })
+        //Delete
+        axios.delete('http://localhost:3000/axios',{
+            params:{
+                id:4
+            }
+        })
+        .then( function(data){
+            console.log(data.data);
+        })
+        //Post,直接将参数放在第二个参数，作为对象传递，默认是Json格式
+        axios.post('http://localhost:3000/axios',{
+            id:1,
+            username:'王小星',
+            age:18
+        })
+        .then( data => {
+            console.log(data.data);
+        })
+        //Put和Post基本类似
+        axios.default.timeout = 3000;//设置超时时间
+        axios.default.baseURL = 'http://localhost:3000/';//会自动拼接
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+        
+    </script>
+</body>
+
+</html>

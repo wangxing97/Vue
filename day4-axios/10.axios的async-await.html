@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <script src="./lib/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        axios.defaults.baseURL = "http://localhost:3000";
+        //async 是“异步”的简写，而 await 可以认为是 async wait 的简写。
+        //所以应该很好理解 async 用于申明一个 function 是异步的，
+        //而 await 用于等待一个异步方法执行完成。
+        async function queryData(url){
+            let ret = await axios.get("/"+url);
+            return ret.data;
+        }
+
+        queryData('ajax1').then(function(data){
+            console.log(data);
+        },function(err){
+            console.log(err);
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

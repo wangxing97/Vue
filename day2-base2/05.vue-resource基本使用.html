@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <!-- 注意：vue-resource依赖于vue 先vue在vue-resource -->
+    <!-- this.$http.jsonp get post 等等 -->
+    <script src="./lib/vue-resource.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="getInfo">get请求</button>
+        <button @click="postInfo">post请求</button>
+        <button @click="jsonpInfo">jsonp请求</button>
+    </div>
+    <script>
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {
+               getInfo(){
+                   //发起get请求
+                   //http://www.liulongbin.top:3005/api/getprodlist
+                   //https://cnodejs.org/api/v1/topics
+                   this.$http.get('http://www.liulongbin.top:3005/api/getprodlist').then(function(result){
+                       console.log(result.data);
+                   })
+               },
+               postInfo(){
+                   //发起post请求
+                   //手动发起的post请求默认没有表单格式
+                   //通过post的第三个参数emulateJSON:true即可
+                   this.$http.post('https://easy-mock.com/mock/5d8758fa79393a29a5046ba5/example/upload',{},{emulateJSON:true}).then(function(result){
+                        console.log(result);
+                   })
+               },
+               //https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg
+               jsonpInfo(){
+                   //发起jsonp请求
+                    this.$http.jsonp('https://api.map.baidu.com/geocoder/v2/').then(result=>{
+                        console.log(result.data);
+                    })
+               }
+           }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{ msg | msgFormat('SUN OF BITCH') | test }}</p>
+    </div>
+    <script>
+        Vue.filter('msgFormat',function(data,msg){
+            // 字符串的replace方法，第一个参数，除了可以写一个字符串以外还可以写一个正则表达式
+            return data.replace(/小小/g,msg);
+        });
+        Vue.filter('test',function(data){
+            // 字符串的replace方法，第一个参数，除了可以写一个字符串以外还可以写一个正则表达式
+            return data+"=>>>>>>>>>>>>>";
+        });
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               msg: '曾经小小少年，到如今风度翩翩，哒哒哒哒哒哒小小,哈哈哈小小的我像大大的太阳'
+           },
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

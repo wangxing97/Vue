@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="button" value="滚动" @click="start">
+        <input type="button" value="停止" @click="stop"><br/>
+        <h2 style="width: 150px;overflow: hidden;white-space: nowrap;">
+            {{msg}}
+        </h2>
+    </div>
+    <script>
+        var vm = new Vue({
+           el: '#app',
+           data: {
+                msg:"萨瓦迪卡，欢迎大家，欢迎大家来到我们美丽的泰国~~",
+                IntervalObj:null,
+                flag:1
+           },
+           methods: {
+               start(){
+                   if(this.flag==1){
+                        this.IntervalObj = setInterval(()=>{
+                        let pre = this.msg.substring(0,1);
+                        let end = this.msg.substring(1);
+                        this.msg = end + pre;
+                       },200);
+                       this.flag = 0;
+                   }
+                 },
+                stop(){
+                        clearInterval(this.IntervalObj);
+                        this.flag = 1;
+                }
+           }
+        });
+    </script>
+</body>
+
+</html>

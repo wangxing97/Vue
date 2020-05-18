@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <style>
+        /* v-enter是一个时间点，是进入之前，元素起始状态，此时还没有开始进入 */
+        /* v-leave-to是一个时间点，是离开之后，动画已经结束了 */
+        .slide-fade-enter,.slide-fade-leave-to{
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        /* v-enter-active入场动画的时间段 */
+        /* v-leave-active出场动画的时间段 */
+        .slide-fade-enter-active,.slide-fade-leave-active{
+            transition: all 1s ease 0.1s;
+        }
+
+        .slide-move-enter,.slide-move-leave-to{
+            opacity: 0;
+            transform: translateX(400px);
+        }
+        .slide-move-enter-active,.slide-move-leave-active{
+            transition: all 3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!--需求：点击按钮让H3显示，在点击让H3消失-->
+        <!-- 1、使用transition元素，把需要被动画控制的元素包裹起来，transition元素是Vue官方提供的 -->
+        <input type="button" value="toggle" @click="flag=!flag">
+        <transition name="slide-fade">
+            <h3 v-if="flag">这是一个h3</h3><br>
+        </transition><br><hr>
+
+        <input type="button" value="toggle" @click="flag1=!flag1">
+        <transition name="slide-move">
+            <div v-if="flag1" style="width: 100px; height: 80px; background: #000;"></div><br>
+        </transition>
+    </div>
+    <script>
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               flag: true,
+               flag1: false
+           },
+           methods: {
+               
+           }
+        });
+    </script>
+</body>
+
+</html>

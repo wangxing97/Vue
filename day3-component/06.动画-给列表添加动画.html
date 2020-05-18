@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <style>
+        li{
+            border: 1px dashed;
+            margin: 5px;
+            padding: 10px;
+            width: 100%;
+        }
+        li:hover{
+            background-color: hotpink;
+            transition: all 2s ease;
+        }
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateY(100px);
+        }
+        .v-enter-active,.v-leave-active,.v-move{
+            transition: all 1s ease;
+        }
+        .v-leave-active{
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div style="margin: 15px;">
+            <label for="">
+                Id:
+                <input type="text" v-model="id">
+            </label>
+            <label for="">
+                    Name:
+                    <input type="text" v-model="name">
+            </label>
+            
+            <input type="button" value="添加" @click="add">
+        </div>
+        <!-- 列表动画需要使用transitionGroup -->
+        
+        <!-- <ul> -->
+            <!-- tag 会在将transition渲染给tag里的dom属性，不指定会默认渲染span -->
+            <transition-group appear tag="ul">
+                <li v-for="(item,i) in list" :key="item.id"> 
+                    {{ item.id }}   --- {{ item.name }}
+                    <a href="#" @click.prevent="del(i)">删除</a>
+                </li>
+            </transition-group>
+        <!-- </ul> -->
+        
+            
+           
+    </div>
+    <script>
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               id:'',
+               name:'',
+               list:[
+                   { id:1, name:'天王星'},
+                   { id:2, name:'海王星'},
+                   { id:3, name:'水王星'},
+                   { id:4, name:'大王星'},
+               ]
+           },
+           methods: {
+               add(){
+                   this.list.push({ id:this.id, name:this.name});
+                   this.id = this.name = '';
+               },
+               del(i){
+                   this.list.splice(i,1);
+               }
+           }
+        });
+    </script>
+</body>
+
+</html>

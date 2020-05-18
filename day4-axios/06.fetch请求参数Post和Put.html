@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        fetch('http://localhost:3000/products',{
+            method:'POST',
+            body:JSON.stringify({
+                username:'王小星',
+                age:18,
+                gender:'男',
+                phone:'18852936367'
+            }),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        .then(function(data){
+            return data.text();
+        })
+        .then(function(data){
+            console.log(data);
+        })
+        fetch('http://localhost:3000/products/39',{
+            method:'Put',
+            body:JSON.stringify({
+                username:'李小宝',
+                age:18,
+                gender:'女',
+                phone:'18852936367'
+            }),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        .then(function(data){
+            return data.text();
+        })
+        .then(function(data){
+            console.log(data);
+        })
+        fetch('http://localhost:3000/jsons',{
+            method:'Get'
+        })
+        .then(function(data){
+            return data.json();
+        })
+        .then(function(data){
+            console.log(data);
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

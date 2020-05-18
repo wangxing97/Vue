@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>{{msg}}</div>
+        <menu-item :tmp="tmp" :tmp-one="tmpOne"></menu-item>
+    </div>
+    <script>
+        Vue.component('menu-item',{
+            data:function(){
+                return {
+                    msg:'子组件的内容'
+                }
+            },
+            //如果这里的name使用驼峰命名例如tmpOne，则上面标签需要用短横线分割,tmp-one
+            props:['tmp','tmpOne'],
+            template:'<div>{{msg}}<br>{{tmp}}<br>{{tmpOne}}</div>'
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               msg:'父组件的内容',
+               tmp:'父组件传给子组件的内容',
+               tmpOne:'驼峰命名区别'
+           },
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

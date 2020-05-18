@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <style>
+        #app{
+            width: 100%;
+            height: 500px;
+            text-align: center;
+        }
+        .header{
+            margin: 0 auto;
+            width: 300px;
+            height: 40px;
+            background: #A6D1E5;
+            text-align: center;
+            line-height: 40px;
+        }
+        .product{
+            margin: 0 auto;
+            width: 300px;
+            height: 60px;
+            margin-top: 5px;
+        }
+        img{
+            width: 80px;
+            height: 40px;
+            margin: 0 auto;
+            float: left;
+        }
+        .btn{
+            width: 30px;
+            height: 30px;
+            background: #D1D1D3;
+            cursor: pointer;
+        }
+        .num{
+            width: 60px;
+            height: 30px;
+        }
+        .content{
+            margin-left: 20px;
+            width: 140px;
+            height: 40px;
+            float: left;
+        }
+        .del{
+            margin-left: 20px;
+            width: 35px;
+            height: 35px;
+            float: left;
+            font-size: 35px;
+            color: red;
+            line-height: 30px;
+            cursor: pointer;
+        }
+        .del:hover{
+            background: yellow;
+        }
+        .footer{
+            margin: 0 auto;
+            width: 300px;
+            height: 55px;
+            background: #FFC63A;
+            text-align: center;
+            line-height: 55px;
+        }
+        .sum{
+            margin-left: 70px;
+            width: 120px;
+            height: 100%;
+            line-height: 55px;
+            color: red;
+            font-size: 20px;
+            float: left;
+        }
+        .total{
+            margin-left: 20px;
+            width: 80px;
+            height: 40px;
+            margin-top: 7px;
+            line-height: 40px;
+            background-color: red;
+            float: left;
+            border: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <my-cart></my-cart>
+    </div>
+    <script>
+        var cartHeader = {
+            props:['username'],
+            template:`
+                <div class="header">
+                    <p>{{username}}的商品</p>
+                </div>
+            `
+        }
+        var cartBody = {
+            props:['list'],
+            // 原则上不修改props里的数据,因此不使用v-model
+            template:`
+                <div>
+                    <div class="product" v-for='item in list' :key='item.id'>
+                        <img :src="item.img">
+                        <div class="content">
+                            <input type="button" value="-" class="btn" @click="del(item.id)">
+                            <input type="text" class="num" :value='item.num' @blur='changeNum(item.id,$event)'>
+                            <input type="button" value="+" class="btn" @click="add(item.id)">
+                        </div>
+                        <div class="del" @click="finalDel(item.id)">
+                            x
+                        </div>
+                    </div>
+                </div>
+            `,
+            methods:{
+                add(id){
+                    this.$emit('change-num',{id:id,type:'add'});
+                },
+                del(id){
+                    this.$emit('change-num',{id:id,type:'del'});
+                },
+                finalDel(id){
+                    // console.log(id);
+                    this.$emit('cart-del',id);
+                },
+                changeNum(id,event){
+                    //console.log(event.target.value);
+                    this.$emit('change-count',{id:id,num:event.target.value})
+                }
+            }
+        }
+        var cartfooter = {
+            props:['list'],
+            template:`
+                <div class="footer">
+                    <div class="sum">
+                        总价：{{totalSum}}
+                    </div>
+                    <button class="total">
+                        结算
+                    </button>
+                </div>
+            `,
+            computed:{
+                totalSum:function(){
+                    var t = 0;
+                    this.list.forEach( item => {
+                        t += item.price * item.num;
+                    });
+                    return t;
+                }
+            }
+        }
+        Vue.component('my-cart',{
+            data:function(){
+                return{
+                    username:'王星',
+                    list:[
+                        {
+                            id:1,
+                            name:'法拉利',
+                            price:100,
+                            num:1,
+                            img:'img/car1.jpg'
+                        },
+                        {
+                            id:2,
+                            name:'小破车',
+                            price:100,
+                            num:1,
+                            img:'img/car2.jpg'
+                        },
+                        {
+                            id:3,
+                            name:'小白车',
+                            price:100,
+                            num:1,
+                            img:'img/car3.jpg'
+                        },
+                        {
+                            id:4,
+                            name:'兰博基尼',
+                            price:100,
+                            num:1,
+                            img:'img/car4.jpg'
+                        },
+                        {
+                            id:5,
+                            name:'保时捷',
+                            price:100,
+                            num:1,
+                            img:'img/car5.jpg'
+                        }
+                    ],
+                    sum:0
+                }
+            },
+            template:`  
+                <div class="cart">
+                    <cart-header :username='username'></cart-header>
+                    <cart-body :list='list' @cart-del="delCart($event)" @change-count="changeCount($event)" @change-num="changeNum($event)"></cart-body>
+                    <cart-footer :list='list'></cart-footer>
+                </div>
+            `,
+            components:{
+                'cart-header':cartHeader,
+                'cart-body':cartBody,
+                'cart-footer':cartfooter
+            },
+            methods:{
+                delCart(id){
+                    var index = this.list.findIndex( item=> {
+                        return item.id == id;
+                    });
+                    this.list.splice(index,1);
+                },
+                changeCount(data){
+                    this.list.filter( item => {
+                        if( item.id == data.id ){
+                            item.num = Number.parseInt(data.num);
+                            return true;
+                        }
+                    })
+                },
+                changeNum(data){
+                    this.list.filter( item => {
+                        if( item.id ==  data.id ){
+                            if( data.type == 'add'){
+                                item.num++;
+                            }else{
+                                item.num--;
+                            }
+                        }
+                    })
+                }
+            }
+        });
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

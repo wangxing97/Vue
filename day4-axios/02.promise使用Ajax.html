@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        function queryData(url){
+            var p = new Promise(function(resolve,reject){
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState != 4) return;
+                    if(xhr.status == 200 && xhr.readyState == 4){
+                        resolve(xhr.responseText);
+                    }else{
+                        reject("ERROR");
+                    }
+                }
+                xhr.open("get",url);
+                xhr.send(null); 
+            })
+            return p;
+        }
+        // queryData("http://localhost:3000/ajax1")
+        // .then(function(data){
+        //     data = JSON.parse(data);
+        //     console.log("成功处理："+data.info);
+        // },function(data){
+        //     console.log("失败处理："+data);
+        // });
+        queryData("http://localhost:3000/ajax1")
+        .then(function(data){
+            console.log(data);
+            //1、return新的Promise对象对为下面then的主体
+            //2、return普通值，直接传递给下一个then，作为参数传
+            return queryData('http://localhost:3000/ajax2');
+        })
+        .then(function(data){
+            console.log(data);
+            return queryData('http://localhost:3000/ajax3');
+        })
+        .then(function(data){
+            console.log(data);
+            return 'return普通值';
+        },function(data){
+            console.log(data);
+        })
+        .then( data => {
+            console.log(data);
+        })
+        
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

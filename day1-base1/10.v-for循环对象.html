@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p v-for="(val,key) in user">
+            值是:{{val}} -----键是:{{key}}
+        </p>
+        <p v-for="count in 10">this is {{count}} times</p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                user: {
+                    id: 1,
+                    name: '王星',
+                    gender: '男'
+                }
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>

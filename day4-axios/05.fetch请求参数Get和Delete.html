@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        // 传统方式GET
+        fetch('http://localhost:3000/book?id=1',{
+            method:'GET'
+        })
+        .then(function(data){
+            return data.text();
+        })
+        .then(function(data){
+            console.log(data);
+        })
+        // RestFul方式GET
+        fetch('http://localhost:3000/products/12',{
+            method:'GET'
+        })
+        .then(function(data){
+            return data.text();
+        })
+        .then(function(data){
+            console.log(data);
+        })
+        // RestFul方式Delete
+        fetch('http://localhost:3000/products/22',{
+            method:'DELETE'
+        })
+        .then(function(data){
+            return data.text();
+        })
+        .then(function(data){
+            console.log(data);
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue_2.5.22.js"></script>
+    <script src="./lib/vue-router_3.0.2.js"></script>
+</head>
+
+<body>
+    <!-- A.导入js文件
+         B.添加路由链接
+         C.添加路由占位符(最后路由展示的组件就会在占位符的位置显示)
+         D.定义路由组件
+         E.配置路由规则并创建路由实例
+         F.将路由挂载到Vue实例中
+    -->
+    <div id="app">
+        <router-link to="/user">User</router-link>
+        <router-link to="/register/2">Register</router-link>
+        <router-view></router-view>
+    </div>
+    <script>
+        const User = {
+            template:`
+                <div>
+                 <button @click='goRegister'>跳转Register</button>
+                </div>
+            `,
+            methods:{
+                goRegister:function(){
+                    this.$router.push('/register/1');
+                }
+            }
+        }
+        const Register = {
+            props:['id'],
+            template:`
+                <div>
+                    <h1>Register---{{id}}</h1>
+                    <button @click="goBack">goBack</button>
+                </div>
+            `,
+            methods:{
+                goBack(){
+                    this.$router.go(-1);
+                }
+            }
+        }
+        var myRouter = new VueRouter({
+            routes:[
+                //直接跳转
+                { path:'/',redirect:'/user'},
+                { path:'/user',component:User},
+                { path:'/register/:id',component:Register,props:route=>({id:route.params.id})}
+            ]
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {},
+           methods: {},
+           router:myRouter
+        });
+    </script>
+</body>
+
+</html>

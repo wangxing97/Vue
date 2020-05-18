@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .thin {
+            font-weight: 200;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+        .active {
+            letter-spacing: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 直接传送数组 需要使用v-bind -->
+        <!-- <h1 :class="['red','italic']">这是H1标签</h1> -->
+        <!-- <h1 :class="['red','italic','active',flag?'active':'']">这是H1标签</h1> -->
+        <!-- <h1 :class="['red','italic','active',{'active':true}]">这是H1标签</h1> -->
+        <h1 :class="{red:true,thin:true,italic:true,active:true}">这是H1标签</h1>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag: true
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>

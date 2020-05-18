@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 不用：绑定的都是string类型 -->
+        <menu-item :pstring="pstring" :pnumber="pnumber" :pboolean="pboolean" :parray="parray" :pobject="pobject"></menu-item>
+    </div>
+    <script>
+        Vue.component('menu-item',{
+            props:['pstring','pnumber','pboolean','parray','pobject'],
+            template:`<div>
+                        <div>
+                            Value：{{pstring}}，Type：{{typeof pstring}}
+                        </div>
+                        <div>
+                            Value：{{pnumber}}，Type：{{typeof pnumber}}
+                        </div>
+                        <div>
+                            Value：{{pboolean}}，Type：{{typeof pboolean}}
+                        </div>
+                        <div>
+                            Value：{{parray}}，Type：{{typeof parray}}
+                        </div>
+                        <div>
+                            Value：{{pobject}}，Type：{{typeof pobject}}
+                        </div>
+                        
+                      </div>`
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               pstring:'String',
+               pnumber:1,
+               pboolean:true,
+               parray:['bird','monkey','tiger'],
+               pobject:{
+                   id:1,
+                   name:'小王'
+               }
+           },
+           methods: {}
+        });
+    </script>
+</body>
+
+</html>

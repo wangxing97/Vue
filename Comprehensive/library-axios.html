@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <script src="./lib/axios.min.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css">
+    <style>
+        .table tr th,td{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+       
+       
+       <div class="panel panel-primary">
+             <div class="panel-heading" style="text-align: center;">
+                   <h4>图书管理</h4>
+             </div>
+             <div class="panel-body form-inline text-center">
+                <label for="bh">编号：</label>
+                <input type="text" class="form-control" id="bh" v-model="id" disabled="true" v-focus>
+                <label for="bn">书名：</label>
+                <input type="text" class="form-control" id="bn" v-model="name">
+                <input type="button" value="添加/修改" class="btn btn-primary" @click="addBook" :disabled="addFlag">
+                <label for="keyWord">书名关键字：</label>
+                <input type="text" id="keyWord" class="form-control" v-model="keyWord">
+             </div>
+       </div>
+       
+       <div style="text-align: center;">
+           <h4>图书总量：{{total}}</h4>
+       </div>
+       
+       <table class="table table-bordered table-hover">
+           <thead>
+               <tr>
+                   <th>编号</th>
+                   <th>书名</th>
+                   <th>时间</th>
+                   <th>操作</th>
+               </tr>
+           </thead>
+           <tbody>
+               <tr v-for="item in search(keyWord)" :key="item.id">
+                   <td>{{item.id}}</td>
+                   <td>{{item.name}}</td>
+                   <td>{{item.date |　dateFormat('yyyy-mm-dd') }}</td>
+                   <td>
+                       <a href="" class="btn btn-success" @click.prevent="updateBook(item.id)">修改</a>
+                       <a href="" class="btn btn-danger" @click.prevent="deleteBook(item.id)">删除</a>
+                   </td>
+               </tr>
+           </tbody>
+       </table>
+       
+    </div>
+    <script>
+        axios.defaults.baseURL = 'http://localhost:3000';
+        axios.interceptors.response.use(res=>{
+            return res.data;
+        },error=>{
+            return error;
+        })
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               id:'',
+               name: '',
+               date: '',
+               keyWord:'',
+               flag: false,
+               addFlag:false,
+               bookCount:'',
+               list:[]
+           },
+           methods: {
+               async addBook(){
+                   if(this.flag){
+                        let ret = await axios.put('/books/'+this.id,{
+                            name:this.name
+                        });
+                        if( ret.status==200 ){
+                            this.queryData();
+                        }else{
+                            alert('更新失败');
+                        }
+                        this.flag = false;
+                   }else{
+                        let ret = await axios.post('/books',{
+                            name:this.name
+                        })
+                        if(ret.status == 200){
+                            this.queryData();
+                        }else{
+                            alert('添加失败');
+                        }
+                   }
+                   this.id = this.name = '';
+               },
+               async updateBook(id){
+                   this.flag = true;
+                   var up = this.list.filter(item => {
+                       return item.id == id;
+                   })
+                   let ret = await axios.get('/books/'+id);
+                   this.id = ret.id;
+                   this.name = ret.name;
+               },
+               async deleteBook(id){
+                   let ret = await axios.delete('/books/'+id);
+                   if( ret.status == 200 ){
+                       this.queryData();
+                   }else{
+                       alert('删除失败');
+                   }
+               },
+               search(keyWord){
+                    let list = this.list.filter(item => {
+                        return item.name.includes(keyWord);
+                    })
+                    return list;
+               },
+               queryData:async function(){
+                    let data = await axios.get('books');
+                    this.list =  data;
+               }
+           },
+           filters:{
+                dateFormat(time){
+                    let oldDate = new Date(time)
+                    let year   = oldDate.getFullYear();
+                    let month  = oldDate.getMonth()+1;
+                    let day    = oldDate.getDate();
+                    let hour   = oldDate.getHours(); 
+                    let minute = oldDate.getMinutes(); 
+                    let second = oldDate.getSeconds(); 
+                    return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
+                }
+           },
+           computed:{
+                total:function(){
+                    return this.list.length;
+                }
+           },
+           directives:{
+                focus:{
+                    inserted:function(el){
+                        el.focus();
+                    }
+                }
+           },
+           watch:{
+                name:async function(val){
+                    // some检测数据组里是否有满足需求的，有返回true，否则false
+                    let ret = await axios.get('/books/book/'+val);
+                    if( ret.status==1 ){
+                        this.addFlag = true;
+                    }else{
+                        this.addFlag = false;
+                    }
+                }
+           },
+           created(){
+                this.bookSum;
+           },
+           mounted(){
+              this.queryData();
+           }
+        });
+    </script>
+</body>
+
+</html>

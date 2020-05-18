@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue-2.4.0.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css">
+    <style>
+        .table tr th,td{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+       
+       
+       <div class="panel panel-primary">
+             <div class="panel-heading" style="text-align: center;">
+                   <h4>图书管理</h4>
+             </div>
+             <div class="panel-body form-inline text-center">
+                <label for="bh">编号：</label>
+                <input type="text" class="form-control" id="bh" v-model="id" :disabled="flag" v-focus>
+                <label for="bn">书名：</label>
+                <input type="text" class="form-control" id="bn" v-model="bookName">
+                <input type="button" value="添加/修改" class="btn btn-primary" @click="addBook" :disabled="addFlag">
+                <label for="keyWord">书名关键字：</label>
+                <input type="text" id="keyWord" class="form-control" v-model="keyWord">
+             </div>
+       </div>
+       
+       <div style="text-align: center;">
+           <h4>图书总量：{{total}}</h4>
+       </div>
+       
+       <table class="table table-bordered table-hover">
+           <thead>
+               <tr>
+                   <th>编号</th>
+                   <th>书名</th>
+                   <th>时间</th>
+                   <th>操作</th>
+               </tr>
+           </thead>
+           <tbody>
+               <tr v-for="item in search(keyWord)" :key="item.id">
+                   <td>{{item.id}}</td>
+                   <td>{{item.bookName}}</td>
+                   <td>{{item.addDate |　dateFormat('yyyy-mm-dd') }}</td>
+                   <td>
+                       <a href="" class="btn btn-success" @click.prevent="updateBook(item.id)">修改</a>
+                       <a href="" class="btn btn-danger" @click.prevent="deleteBook(item.id)">删除</a>
+                   </td>
+               </tr>
+           </tbody>
+       </table>
+       
+    </div>
+    <script>
+        var vm = new Vue({
+           el: '#app',
+           data: {
+               id:'',
+               bookName: '',
+               addDate: '',
+               keyWord:'',
+               flag: false,
+               addFlag:false,
+               bookCount:'',
+               list:[]
+           },
+           methods: {
+               addBook(){
+                   if(this.flag){
+                        this.list.filter(item => {
+                            if(item.id==this.id){
+                                item.bookName = this.bookName ;
+                                this.flag = false;
+                                return true;
+                            }
+                        })
+                   }else{
+                        var book = {};
+                        book.id = this.id;
+                        book.bookName = this.bookName;
+                        book.addDate = new Date();
+                        this.list.push(book);
+                   }
+                   this.id = this.bookName = '';
+               },
+               updateBook(id){
+                   //console.log(id);
+                   var up = this.list.filter(item => {
+                       return item.id == id;
+                   })
+                   this.id = up[0].id;
+                   this.bookName = up[0].bookName;
+                   this.flag = true;
+               },
+               deleteBook(id){
+                   this.list = this.list.filter(item => {
+                       return item.id!=id;
+                   });
+               },
+               search(keyWord){
+                    var list = this.list.filter(item => {
+                        return item.bookName.includes(keyWord);
+                    })
+                    return list;
+               }
+           },
+           filters:{
+                dateFormat(time){
+                    let oldDate = new Date(time)
+                    let year   = oldDate.getFullYear();
+                    let month  = oldDate.getMonth()+1;
+                    let day    = oldDate.getDate();
+                    let hour   = oldDate.getHours(); 
+                    let minute = oldDate.getMinutes(); 
+                    let second = oldDate.getSeconds(); 
+                    return year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
+                }
+           },
+           computed:{
+                total:function(){
+                    return this.list.length;
+                }
+           },
+           directives:{
+                focus:{
+                    inserted:function(el){
+                        el.focus();
+                    }
+                }
+           },
+           watch:{
+                bookName:function(val){
+                    // some检测数据组里是否有满足需求的，有返回true，否则false
+                    var f = this.list.some(item => {
+                        return item.bookName == val;
+                    });
+                    this.addFlag = f;
+                }
+           },
+           created(){
+                this.bookSum;
+           },
+           mounted(){
+               let data = [
+                    {    
+                        id:'1',
+                        bookName:'西游记',
+                        addDate:new Date()
+                    },
+                    {
+                        id:'2',
+                        bookName:'三国演义',
+                        addDate:new Date()
+                    },
+                    {
+                        id:'3',
+                        bookName:'红楼梦',
+                        addDate:new Date()
+                    }
+               ];
+               this.list = data;
+           }
+        });
+    </script>
+</body>
+
+</html>
